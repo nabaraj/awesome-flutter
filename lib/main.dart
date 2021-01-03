@@ -6,7 +6,7 @@ void main() {
     title: "Awesome App",
     home: HomePage(),
     theme: ThemeData(
-      primarySwatch: Colors.purple,
+      primarySwatch: Colors.lime,
     ),
   ));
 }

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-
+import "package:http/http.dart" as http;
 import '../drawer.dart';
-import '../nameCard.dart';
+import "dart:convert";
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,10 +11,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController _nameController = TextEditingController();
   var myText = "change me";
+  var url = 'https://jsonplaceholder.typicode.com/photos';
+  var data;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getData();
+  }
+
+  getData() async {
+    var res = await http.get(url);
+
+    data = jsonDecode(res.body);
+    print(jsonDecode(res.body));
+    setState(() {});
   }
 
   @override
@@ -24,8 +36,24 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text("Awesome App"),
         ),
-        body: SingleChildScrollView(
-          child: NameCard(myText: null, nameController: null),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: data != null
+              ? ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(data[index]["title"]),
+                        subtitle: Text("ID: ${data[index]["id"]}"),
+                        leading: Image.network(
+                            "https://picsum.photos/id/$index/300/300"),
+                      ),
+                    );
+                  },
+                  itemCount: data.length,
+                )
+              : Center(child: CircularProgressIndicator()),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
