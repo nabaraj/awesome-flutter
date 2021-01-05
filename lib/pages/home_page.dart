@@ -1,3 +1,4 @@
+import 'package:awesapp/utils/Constants.dart';
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 import '../drawer.dart';
@@ -38,6 +39,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Awesome App"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                Constants.prefs.setBool('loggedIn', false);
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),

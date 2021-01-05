@@ -1,4 +1,5 @@
 import 'package:awesapp/bg_image.dart';
+import 'package:awesapp/utils/Constants.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -22,29 +23,39 @@ class LoginPage extends StatelessWidget {
                   child: Card(
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Form(
-                              child: Column(children: [
-                            TextFormField(
-                                decoration: InputDecoration(
-                                    hintText: "Enter Username",
-                                    labelText: "Username")),
-                            SizedBox(height: 20),
-                            TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    hintText: "Enter Password",
-                                    labelText: "Password")),
-                            SizedBox(height: 20),
-                            RaisedButton(
-                              onPressed: () {
-                                print('should redirect to home');
-                                Navigator.pushNamed(context, '/home');
-                              },
-                              child: Text("Sign In"),
-                            )
-                          ])),
+                        Container(
+                          constraints: BoxConstraints(maxWidth: 400),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Form(
+                                child: Column(children: [
+                              Text(
+                                "Login Form",
+                                style: TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              ),
+                              TextFormField(
+                                  decoration: InputDecoration(
+                                      hintText: "Enter Username",
+                                      labelText: "Username")),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                      hintText: "Enter Password",
+                                      labelText: "Password")),
+                              SizedBox(height: 20),
+                              RaisedButton(
+                                onPressed: () {
+                                  Constants.prefs.setBool('loggedIn', true);
+                                  print('should redirect to home');
+                                  Navigator.pushReplacementNamed(
+                                      context, '/home');
+                                },
+                                child: Text("Sign In"),
+                              )
+                            ])),
+                          ),
                         )
                       ],
                     ),

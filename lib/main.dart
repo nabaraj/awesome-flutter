@@ -6,6 +6,9 @@ import 'package:awesapp/pages/login_page.dart';
 import "package:flutter/material.dart";
 import "dart:math";
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:awesapp/utils/Constants.dart';
+
 returnTheme() {
   var list = [
     {"color": 'Lime', "theme": Colors.lime},
@@ -33,11 +36,16 @@ returnTheme() {
   return randomColor;
 }
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Constants.prefs = await SharedPreferences.getInstance();
+
   var themeMethod = returnTheme();
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: "Awesome App ${themeMethod['color']}",
-    home: LoginPage(),
+    home:
+        Constants.prefs.getBool('loggedIn') == true ? HomePage() : LoginPage(),
     theme: ThemeData(
         primarySwatch: themeMethod['theme'],
         buttonTheme: ButtonThemeData(
