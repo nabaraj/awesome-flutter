@@ -4,32 +4,12 @@ import "package:http/http.dart" as http;
 import '../widget/drawer.dart';
 import "dart:convert";
 
-class HomePage extends StatefulWidget {
-  final String currentTheme = "";
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  TextEditingController _nameController = TextEditingController();
-
-  var myText = "change me";
-  var url = 'https://jsonplaceholder.typicode.com/photos';
-  var data;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getData();
-  }
-
-  getData() async {
-    var res = await http.get(url);
-
-    data = jsonDecode(res.body);
-    // print(jsonDecode(res.body));
-    setState(() {});
+class HomePageFB extends StatelessWidget {
+  Future getData() async {
+    var res = await http.get('https://jsonplaceholder.typicode.com/photos');
+    var data = jsonDecode(res.body);
+    print(data);
+    return data;
   }
 
   @override
@@ -48,31 +28,46 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: data != null
-              ? ListView.builder(
+        body: FutureBuilder(
+          future: getData(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return Center(
+                  child: Text('Fatch somethin'),
+                );
+              case ConnectionState.active:
+              case ConnectionState.waiting:
+                return Center(child: CircularProgressIndicator());
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Some error occured'),
+                  );
+                }
+                return ListView.builder(
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         child: ListTile(
-                          title: Text(data[index]["title"]),
-                          subtitle: Text("ID: ${data[index]["id"]}"),
+                          title: Text(snapshot.data[index]["title"]),
+                          subtitle: Text("ID: ${snapshot.data[index]["id"]}"),
                           leading: Image.network(
                               "https://picsum.photos/id/$index/300/300"),
                         ),
                       ),
                     );
                   },
-                  itemCount: data.length,
-                )
-              : Center(child: CircularProgressIndicator()),
+                  itemCount: snapshot.data.length,
+                );
+            }
+          },
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            myText = _nameController.text;
-            setState(() {});
+            // myText = _nameController.text;
+            // setState(() {});
           },
           child: Icon(Icons.refresh),
           mini: true,

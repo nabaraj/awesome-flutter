@@ -1,4 +1,4 @@
-import 'package:awesapp/bg_image.dart';
+import 'package:awesapp/widget/bg_image.dart';
 import 'package:awesapp/utils/Constants.dart';
 import 'package:flutter/material.dart';
 

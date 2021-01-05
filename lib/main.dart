@@ -1,7 +1,8 @@
 // import 'package:awesapp/pages/home_page.dart';
 import 'dart:js';
 
-import 'package:awesapp/pages/home_page.dart';
+// import 'package:awesapp/pages/home_page.dart';
+import 'package:awesapp/pages/home_pageFB.dart';
 import 'package:awesapp/pages/login_page.dart';
 import "package:flutter/material.dart";
 import "dart:math";
@@ -44,8 +45,9 @@ Future main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "Awesome App ${themeMethod['color']}",
-    home:
-        Constants.prefs.getBool('loggedIn') == true ? HomePage() : LoginPage(),
+    home: Constants.prefs.getBool('loggedIn') == true
+        ? HomePageFB()
+        : LoginPage(),
     theme: ThemeData(
         primarySwatch: themeMethod['theme'],
         buttonTheme: ButtonThemeData(
@@ -54,7 +56,7 @@ Future main() async {
         )),
     routes: {
       '/login': (context) => LoginPage(),
-      '/home': (context) => HomePage()
+      '/home': (context) => HomePageFB()
     },
   ));
 }
